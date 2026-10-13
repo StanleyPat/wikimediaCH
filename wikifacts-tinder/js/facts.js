@@ -1,6 +1,14 @@
-import { Fact } from "./types";
+/**
+ * WikiFacts Tinder - Fakten-Datenbank
+ * Jedes Fakt-Objekt enthält:
+ * - id: Eindeutige Kennung
+ * - text: Die zu überprüfende Aussage
+ * - isTrue: Wahrheitswert (true / false)
+ * - explanation: Ausführliche Aufklärung
+ * - sources: Liste vertrauenswürdiger Quellen (Wikipedia, wissenschaftliche Seiten etc.)
+ */
 
-export const FACTS: Fact[] = [
+const FACTS = [
   {
     id: "1",
     text: "Die Chinesische Mauer ist das einzige von Menschen geschaffene Bauwerk, das man mit bloßem Auge vom Mond aus sehen kann.",
@@ -52,3 +60,8 @@ export const FACTS: Fact[] = [
     ]
   }
 ];
+
+// Für Umgebungen mit Modulen verfügbar machen, falls importiert:
+if (typeof module !== 'undefined' && module.exports) {
+  module.exports = { FACTS };
+}

@@ -1,13 +1,233 @@
-<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>My Google AI Studio App</title>
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.tsx"></script>
-  </body>
-</html>
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>WikiFacts Tinder – Wahr oder Falsch?</title>
+  <meta name="description" content="Ein temporeiches Wissens- und Quizspiel: Wische nach rechts für wahre Fakten und nach links für Mythen. Geprüft mit verlässlichen Wikimedia-Quellen." />
+  <meta name="theme-color" content="#f8fafc" />
 
+  <!-- Google Fonts Preconnect -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+
+  <!-- Vanilla CSS Stylesheet -->
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+  <!-- Main Application Container -->
+  <main class="app-container" id="app" role="main">
+
+    <!-- Screen 1: Start Screen -->
+    <section class="screen active" id="screen-start" aria-labelledby="start-title">
+      <div class="card-hero">
+        <div class="icon-hero-badge" aria-hidden="true">
+          <svg class="icon-svg" style="width: 2.75rem; height: 2.75rem; fill: currentColor;" viewBox="0 0 24 24">
+            <polygon points="5 3 19 12 5 21 5 3"></polygon>
+          </svg>
+        </div>
+
+        <h1 class="hero-title" id="start-title">WikiFacts Tinder</h1>
+        <p class="hero-subtitle">
+          Bist du ein Fakten-Check-Profi? Entscheide bei jeder Aussage: Wahr oder Falsch?
+        </p>
+
+        <div class="pill-info">
+          <svg class="icon-svg" style="width: 1rem; height: 1rem;" viewBox="0 0 24 24">
+            <circle cx="12" cy="12" r="10"></circle>
+            <line x1="12" y1="16" x2="12" y2="12"></line>
+            <line x1="12" y1="8" x2="12.01" y2="8"></line>
+          </svg>
+          <span>5 spannende Wikimedia-Fakten</span>
+        </div>
+
+        <button type="button" class="btn-primary" id="btn-start" aria-label="Spiel jetzt starten">
+          <span>Spiel starten</span>
+          <svg class="icon-svg" viewBox="0 0 24 24">
+            <line x1="5" y1="12" x2="19" y2="12"></line>
+            <polyline points="12 5 19 12 12 19"></polyline>
+          </svg>
+        </button>
+      </div>
+    </section>
+
+    <!-- Screen 2: Game Screen -->
+    <section class="screen" id="screen-game" aria-label="Fakten-Quiz">
+      <!-- Game Header -->
+      <header class="app-header">
+        <div class="brand-wrapper">
+          <div class="brand-logo">
+            <span>WIKIFACTS</span>
+            <span class="brand-badge">CH</span>
+          </div>
+          <div class="progress-track" id="progress-track" aria-label="Spielfortschritt" role="progressbar">
+            <!-- Progress bar pills rendered by JS -->
+          </div>
+        </div>
+
+        <div class="header-actions">
+          <button type="button" class="btn-icon-round" id="btn-sound" aria-label="Ton umschalten" title="Ton umschalten">
+            <svg class="icon-svg" id="sound-icon" viewBox="0 0 24 24">
+              <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+              <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+            </svg>
+          </button>
+
+          <div class="score-badge" aria-live="polite">
+            <span class="score-label">Score</span>
+            <span class="score-number" id="score-number">0</span>
+          </div>
+        </div>
+      </header>
+
+      <!-- Tinder Card Stack Area -->
+      <div class="card-stack-viewport" id="card-stack">
+        <!-- Next Card (Behind / Shadow) -->
+        <article class="fact-card card-under" id="card-under" aria-hidden="true">
+          <div class="fact-card-body">
+            <p class="fact-text" id="fact-text-under">Nächster Fakt lädt...</p>
+          </div>
+        </article>
+
+        <!-- Active Card (Foreground Draggable) -->
+        <article class="fact-card card-active" id="card-active" tabindex="0" aria-label="Aktueller Fakt zum Wischen">
+          <!-- Live Swipe Stamps -->
+          <div class="stamp stamp-true" id="stamp-true" aria-hidden="true">WAHR</div>
+          <div class="stamp stamp-false" id="stamp-false" aria-hidden="true">FALSCH</div>
+
+          <div class="fact-card-body">
+            <h2 class="fact-text" id="fact-text-active">Fakt wird geladen...</h2>
+          </div>
+
+          <div class="card-swipe-hint" aria-hidden="true">
+            <span>← Falsch</span>
+            <span>•</span>
+            <span>Wahr →</span>
+          </div>
+        </article>
+
+        <!-- Explanation Overlay Card -->
+        <article class="explanation-card" id="explanation-card" role="region" aria-live="assertive" aria-label="Aufklärung des Fakts">
+          <div class="explanation-icon-wrapper" id="explanation-icon">
+            <!-- Checkmark or X SVG injected here -->
+          </div>
+
+          <h2 class="explanation-title" id="explanation-title">Richtig!</h2>
+          <p class="explanation-body" id="explanation-body">Ausführliche Erklärung zum Fakt...</p>
+
+          <button type="button" class="btn-primary" id="btn-next-fact" aria-label="Zum nächsten Fakt übergehen">
+            <span>Nächster Fakt</span>
+            <svg class="icon-svg" viewBox="0 0 24 24">
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+              <polyline points="12 5 19 12 12 19"></polyline>
+            </svg>
+          </button>
+        </article>
+      </div>
+
+      <!-- Sources Section -->
+      <aside class="sources-panel" id="sources-panel" aria-label="Recherche-Quellen">
+        <span class="sources-label">Recherche-Quellen</span>
+        <div class="sources-tags" id="sources-tags">
+          <!-- Dynamic Source Chips -->
+        </div>
+      </aside>
+
+      <!-- Action Decision Buttons -->
+      <nav class="actions-row" id="game-actions" aria-label="Entscheidungs-Buttons">
+        <button type="button" class="btn-decision btn-decision-false" id="btn-false" aria-label="Falsch - Nach links wischen">
+          <svg class="icon-svg" style="width: 1.3rem; height: 1.3rem;" viewBox="0 0 24 24">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+          <span>FALSCH</span>
+        </button>
+
+        <button type="button" class="btn-decision btn-decision-true" id="btn-true" aria-label="Wahr - Nach rechts wischen">
+          <svg class="icon-svg" style="width: 1.3rem; height: 1.3rem;" viewBox="0 0 24 24">
+            <polyline points="20 6 9 17 4 12"></polyline>
+          </svg>
+          <span>WAHR</span>
+        </button>
+      </nav>
+
+      <p class="keyboard-hint" aria-hidden="true">
+        Tastatur: Nutze <strong>←</strong> für Falsch und <strong>→</strong> für Wahr
+      </p>
+    </section>
+
+    <!-- Screen 3: Finish Screen -->
+    <section class="screen" id="screen-finish" aria-labelledby="finish-title">
+      <div class="card-hero">
+        <div class="icon-trophy-badge" aria-hidden="true">
+          <svg class="icon-svg" style="width: 3rem; height: 3rem;" viewBox="0 0 24 24">
+            <path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"></path>
+            <path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"></path>
+            <path d="M4 22h16"></path>
+            <path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"></path>
+            <path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"></path>
+            <path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"></path>
+          </svg>
+        </div>
+
+        <h1 class="hero-title" id="finish-title">Fertig!</h1>
+        <p class="hero-subtitle">Du hast alle Fakten gründlich geprüft.</p>
+
+        <!-- Big Score Box -->
+        <div class="score-box-large">
+          <div class="score-big">
+            <span id="finish-score-big">0</span><span id="finish-score-total">/5</span>
+          </div>
+          <div class="score-label">Dein Gesamtergebnis</div>
+          <div class="score-comment" id="finish-score-comment">Super Leistung!</div>
+        </div>
+
+        <!-- Review Summary Accordion -->
+        <div class="review-container">
+          <button type="button" class="review-toggle-btn" id="review-toggle-btn">
+            <span>Alle Fakten im Überblick ansehen</span>
+            <svg class="icon-svg icon-chevron" style="width: 1rem; height: 1rem; transition: transform 0.25s ease;" viewBox="0 0 24 24">
+              <polyline points="6 9 12 15 18 9"></polyline>
+            </svg>
+          </button>
+          <div class="review-list" id="review-list">
+            <!-- Injected by JS -->
+          </div>
+        </div>
+
+        <!-- Finish Actions -->
+        <div class="actions-row">
+          <button type="button" class="btn-primary" id="btn-restart" aria-label="Spiel neustarten">
+            <svg class="icon-svg" viewBox="0 0 24 24">
+              <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path>
+              <path d="M3 3v5h5"></path>
+            </svg>
+            <span>Neustart</span>
+          </button>
+
+          <button type="button" class="btn-secondary" id="btn-share" aria-label="Ergebnis teilen">
+            <svg class="icon-svg" viewBox="0 0 24 24">
+              <circle cx="18" cy="5" r="3"></circle>
+              <circle cx="6" cy="12" r="3"></circle>
+              <circle cx="18" cy="19" r="3"></circle>
+              <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line>
+              <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line>
+            </svg>
+            <span>Teilen</span>
+          </button>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Toast Notification -->
+  <div class="toast-notice" id="toast" role="status" aria-live="polite"></div>
+
+  <!-- Vanilla Scripts -->
+  <script src="js/facts.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

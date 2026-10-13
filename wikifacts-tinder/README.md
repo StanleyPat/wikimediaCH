@@ -1,20 +1,40 @@
-<div align="center">
-<img width="1200" height="475" alt="GHBanner" src="https://ai.google.dev/static/site-assets/images/share-ais-513315318.png" />
-</div>
+# WikiFacts Tinder 🃏
 
-# Run and deploy your AI Studio app
+Ein schnelles, interaktives Wissens- und Faktenquiz nach dem Tinder-Prinzip (Swipe-Cards).
+Entwickelt mit dem **Vanilla Stack (reines HTML5, CSS3 und modernes JavaScript)** – komplett ohne Node.js, React, Tailwind oder Build-Tools.
 
-This contains everything you need to run your app locally.
+## Features ✨
 
-View your app in AI Studio: https://ai.studio/apps/753568cb-49e0-4c9c-882f-b382a1ff4ddb
+- **Tinder-Swipe-Mechanik:** Volle Touch- und Maus-Gestensteuerung (Swipe nach rechts für *WAHR*, nach links für *FALSCH*) mit dynamischen Stempeln und flüssiger Physik.
+- **Barrierefreie Bedienung:** Auch per Klick auf die FALSCH/WAHR-Buttons oder per Tastatur steuerbar (`←` für Falsch, `→` für Wahr, `Leertaste`/`Enter` zum Bestätigen).
+- **Soundeffekte:** Integrierter Sound-Synthesizer via Web Audio API (keine externen Audio-Dateien nötig), mit Mute-Schalter.
+- **Quellenprüfung:** Verlinkung zu geprüften Wikipedia- und Fachquellen für jeden Fakt.
+- **Ergebnis & Fakten-Rückblick:** Detaillierte Punkteauswertung mit Akkordeon zur Durchsicht aller überprüften Fakten und Share-Funktion.
+- **Responsive & Modernes Design:** Schlankes Zinc-Farbschema, Dark-Mode-Unterstützung, flüssige Animationen und typografische Eleganz.
 
-## Run Locally
+## Lokale Ausführung 🚀
 
-**Prerequisites:**  Node.js
+Da es sich um eine reine **Vanilla-Stack-Webanwendung** handelt, sind **keine Installationen (kein npm, kein Node.js)** erforderlich:
 
+### Option 1: Direkt im Browser öffnen
+Doppelklicke einfach auf die Datei `index.html` oder öffne sie direkt im Browser deiner Wahl (Chrome, Safari, Firefox, Edge).
 
-1. Install dependencies:
-   `npm install`
-2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
-3. Run the app:
-   `npm run dev`
+### Option 2: Mit Python lokal servieren
+Im Verzeichnis `wikifacts-tinder/`:
+```bash
+python3 -m http.server 3000
+```
+Öffne anschließend [http://localhost:3000](http://localhost:3000) im Browser.
+
+## Projektstruktur 📁
+
+```text
+wikifacts-tinder/
+├── index.html       # Semantische HTML5-Struktur & Screens
+├── css/
+│   └── style.css    # Reines Vanilla CSS (Design-System, Animationen, Responsive Layout)
+├── js/
+│   ├── facts.js     # Fakten-Datensatz mit Erklärungen & Quellen
+│   └── app.js       # Game-Engine, Drag-Physik, Audio-Synthesizer & UI-Controller
+└── README.md
+```

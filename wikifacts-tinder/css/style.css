@@ -1,0 +1,922 @@
+/* ==========================================================================
+   WikiFacts Tinder - Premium Vanilla CSS Design System
+   ========================================================================== */
+
+:root {
+  /* Harmonious Slate & Zinc Palette */
+  --bg-page: #f8fafc;
+  --bg-card: #ffffff;
+  --bg-card-subtle: #f1f5f9;
+  --bg-card-hover: #e2e8f0;
+  
+  --text-main: #0f172a;
+  --text-muted: #64748b;
+  --text-subtle: #94a3b8;
+  --text-light: #f8fafc;
+  
+  --border-card: #e2e8f0;
+  --border-light: #f1f5f9;
+  
+  /* Status Colors */
+  --color-true: #059669;
+  --color-true-light: #ecfdf5;
+  --color-true-border: #34d399;
+  --color-true-hover: #10b981;
+
+  --color-false: #e11d48;
+  --color-false-light: #fff1f2;
+  --color-false-border: #fb7185;
+  --color-false-hover: #f43f5e;
+
+  --color-amber: #d97706;
+  --color-amber-light: #fef3c7;
+  
+  --color-accent: #0f172a;
+  --color-accent-hover: #1e293b;
+  
+  /* Geometry & Shadows */
+  --radius-app: 2.5rem;
+  --radius-card: 2.25rem;
+  --radius-btn: 1.25rem;
+  --radius-pill: 9999px;
+
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --shadow-card: 0 20px 30px -10px rgba(15, 23, 42, 0.07), 0 10px 15px -8px rgba(15, 23, 42, 0.04);
+  --shadow-pop: 0 25px 50px -12px rgba(15, 23, 42, 0.16);
+  --shadow-glow: 0 0 25px -5px rgba(5, 150, 105, 0.3);
+
+  /* Fonts */
+  --font-family: 'Plus Jakarta Sans', 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+/* Dark Mode Overrides */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg-page: #090d16;
+    --bg-card: #131b2e;
+    --bg-card-subtle: #1c2740;
+    --bg-card-hover: #263554;
+    
+    --text-main: #f8fafc;
+    --text-muted: #94a3b8;
+    --text-subtle: #64748b;
+    
+    --border-card: #1e293b;
+    --border-light: #182236;
+    
+    --color-accent: #f8fafc;
+    --color-accent-hover: #e2e8f0;
+    --text-light: #0f172a;
+    
+    --shadow-card: 0 20px 35px -10px rgba(0, 0, 0, 0.5);
+    --shadow-pop: 0 30px 60px -12px rgba(0, 0, 0, 0.7);
+
+    --color-true-light: rgba(5, 150, 105, 0.15);
+    --color-false-light: rgba(225, 29, 72, 0.15);
+    --color-amber-light: rgba(217, 119, 6, 0.15);
+  }
+}
+
+/* ==========================================================================
+   Base Styles & Reset
+   ========================================================================== */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+
+html, body {
+  width: 100%;
+  height: 100%;
+  overflow-x: hidden;
+}
+
+body {
+  font-family: var(--font-family);
+  background-color: var(--bg-page);
+  color: var(--text-main);
+  line-height: 1.5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 1rem;
+  background-image: 
+    radial-gradient(at 0% 0%, rgba(5, 150, 105, 0.05) 0px, transparent 50%),
+    radial-gradient(at 100% 100%, rgba(225, 29, 72, 0.05) 0px, transparent 50%);
+  background-attachment: fixed;
+}
+
+/* App Shell */
+.app-container {
+  width: 100%;
+  max-width: 440px;
+  min-height: 640px;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  margin: auto;
+}
+
+/* ==========================================================================
+   Header Component
+   ========================================================================== */
+.app-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.5rem 0.5rem 1.25rem;
+  user-select: none;
+}
+
+.brand-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.brand-logo {
+  font-size: 1.35rem;
+  font-weight: 900;
+  letter-spacing: -0.04em;
+  color: var(--text-main);
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.brand-badge {
+  font-size: 0.65rem;
+  font-weight: 800;
+  background: var(--text-main);
+  color: var(--bg-page);
+  padding: 0.15rem 0.45rem;
+  border-radius: 6px;
+  letter-spacing: 0.05em;
+}
+
+/* Progress Indicator Bars */
+.progress-track {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.progress-pill {
+  height: 5px;
+  border-radius: 9999px;
+  transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  background: var(--border-card);
+  width: 10px;
+}
+
+.progress-pill.completed {
+  background: var(--text-main);
+  width: 18px;
+}
+
+.progress-pill.active {
+  background: var(--color-true);
+  width: 32px;
+  box-shadow: 0 0 8px rgba(5, 150, 105, 0.4);
+}
+
+/* Header Utilities */
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+}
+
+.score-badge {
+  background: var(--bg-card);
+  border: 1px solid var(--border-card);
+  border-radius: var(--radius-btn);
+  padding: 0.4rem 0.9rem;
+  box-shadow: var(--shadow-sm);
+  text-align: right;
+  min-width: 60px;
+}
+
+.score-label {
+  display: block;
+  font-size: 0.65rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-subtle);
+  line-height: 1;
+}
+
+.score-number {
+  display: block;
+  font-size: 1.25rem;
+  font-weight: 900;
+  line-height: 1.1;
+  color: var(--text-main);
+  transition: transform 0.2s ease;
+}
+
+.score-number.pop {
+  animation: scoreBounce 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+@keyframes scoreBounce {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.4); color: var(--color-true); }
+  100% { transform: scale(1); }
+}
+
+.btn-icon-round {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 1px solid var(--border-card);
+  background: var(--bg-card);
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: var(--shadow-sm);
+}
+
+.btn-icon-round:hover {
+  background: var(--bg-card-subtle);
+  color: var(--text-main);
+  transform: translateY(-1px);
+}
+
+.btn-icon-round:active {
+  transform: scale(0.92);
+}
+
+/* ==========================================================================
+   Screen Transitions & Layout
+   ========================================================================== */
+.screen {
+  display: none;
+  width: 100%;
+  opacity: 0;
+  transform: translateY(12px);
+  transition: opacity 0.3s ease, transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.screen.active {
+  display: flex;
+  flex-direction: column;
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ==========================================================================
+   Start Screen & Finish Screen Styles
+   ========================================================================== */
+.card-hero {
+  background: var(--bg-card);
+  border: 1px solid var(--border-card);
+  border-radius: var(--radius-app);
+  box-shadow: var(--shadow-pop);
+  padding: 2.75rem 2rem;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  animation: cardFadeIn 0.4s ease-out;
+}
+
+@keyframes cardFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(18px) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.icon-hero-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 84px;
+  height: 84px;
+  border-radius: 1.75rem;
+  background: var(--text-main);
+  color: var(--bg-card);
+  margin-bottom: 1.75rem;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.25);
+  transform: rotate(3deg);
+  transition: transform 0.3s ease;
+}
+
+.card-hero:hover .icon-hero-badge {
+  transform: rotate(6deg) scale(1.05);
+}
+
+.icon-trophy-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 88px;
+  height: 88px;
+  border-radius: 50%;
+  background: var(--color-amber-light);
+  color: var(--color-amber);
+  margin-bottom: 1.5rem;
+  box-shadow: 0 10px 20px -5px rgba(217, 119, 6, 0.2);
+  animation: pulseGlow 2.5s infinite;
+}
+
+@keyframes pulseGlow {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.06); }
+}
+
+.hero-title {
+  font-size: 2.15rem;
+  font-weight: 900;
+  letter-spacing: -0.04em;
+  color: var(--text-main);
+  margin-bottom: 0.75rem;
+  line-height: 1.15;
+}
+
+.hero-subtitle {
+  font-size: 1.05rem;
+  color: var(--text-muted);
+  line-height: 1.6;
+  margin-bottom: 2rem;
+  max-width: 320px;
+}
+
+.pill-info {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  background: var(--bg-card-subtle);
+  border: 1px solid var(--border-card);
+  padding: 0.4rem 0.9rem;
+  border-radius: var(--radius-pill);
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  margin-bottom: 1.5rem;
+}
+
+/* Score Summary on Finish */
+.score-box-large {
+  background: var(--bg-card-subtle);
+  border: 1px solid var(--border-card);
+  border-radius: 1.75rem;
+  padding: 1.75rem 2rem;
+  width: 100%;
+  margin-bottom: 1.75rem;
+}
+
+.score-box-large .score-big {
+  font-size: 3.75rem;
+  font-weight: 900;
+  line-height: 1;
+  color: var(--text-main);
+  margin-bottom: 0.25rem;
+  letter-spacing: -0.05em;
+}
+
+.score-box-large .score-big span {
+  font-size: 1.85rem;
+  font-weight: 700;
+  color: var(--text-subtle);
+}
+
+.score-box-large .score-comment {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--color-true);
+  margin-top: 0.5rem;
+}
+
+/* Review Accordion on Finish */
+.review-container {
+  width: 100%;
+  text-align: left;
+  margin-bottom: 1.75rem;
+}
+
+.review-toggle-btn {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: transparent;
+  border: none;
+  font-family: inherit;
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  padding: 0.5rem 0;
+  cursor: pointer;
+}
+
+.review-toggle-btn:hover {
+  color: var(--text-main);
+}
+
+.review-list {
+  display: none;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-top: 0.75rem;
+  max-height: 240px;
+  overflow-y: auto;
+  padding-right: 4px;
+}
+
+.review-list.open {
+  display: flex;
+}
+
+.review-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  padding: 0.75rem 1rem;
+  background: var(--bg-card-subtle);
+  border-radius: 1rem;
+  border: 1px solid var(--border-card);
+  font-size: 0.85rem;
+}
+
+.review-badge {
+  flex-shrink: 0;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+  font-weight: 800;
+}
+
+.review-badge.correct {
+  background: var(--color-true-light);
+  color: var(--color-true);
+}
+
+.review-badge.incorrect {
+  background: var(--color-false-light);
+  color: var(--color-false);
+}
+
+.review-item-text {
+  flex: 1;
+  color: var(--text-main);
+  line-height: 1.4;
+}
+
+/* ==========================================================================
+   Tinder Card Stack Component
+   ========================================================================== */
+.card-stack-viewport {
+  position: relative;
+  width: 100%;
+  height: 420px;
+  margin-bottom: 1.25rem;
+  perspective: 1000px;
+}
+
+/* Individual Card */
+.fact-card {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  background: var(--bg-card);
+  border: 1px solid var(--border-card);
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-card);
+  padding: 2.25rem 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: none;
+  will-change: transform, opacity;
+  overflow: hidden;
+}
+
+/* Behind Card (Shadow Card) */
+.card-under {
+  z-index: 1;
+  transform: translateY(16px) scale(0.95);
+  opacity: 0.55;
+  pointer-events: none;
+  transition: transform 0.25s ease, opacity 0.25s ease;
+}
+
+/* Active Top Card */
+.card-active {
+  z-index: 10;
+  cursor: grab;
+}
+
+.card-active.dragging {
+  cursor: grabbing;
+}
+
+.card-active.snapping {
+  transition: transform 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.card-active.swiping-left {
+  transition: transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1), opacity 0.35s ease;
+  transform: translate3d(-140vw, 20px, 0) rotate(-35deg) !important;
+  opacity: 0 !important;
+}
+
+.card-active.swiping-right {
+  transition: transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1), opacity 0.35s ease;
+  transform: translate3d(140vw, 20px, 0) rotate(35deg) !important;
+  opacity: 0 !important;
+}
+
+/* Card Content */
+.fact-card-body {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+  width: 100%;
+}
+
+.fact-text {
+  font-size: 1.55rem;
+  font-weight: 800;
+  line-height: 1.35;
+  color: var(--text-main);
+  letter-spacing: -0.02em;
+}
+
+.card-swipe-hint {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--text-subtle);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 1rem;
+}
+
+/* Swipe Stamp Badges */
+.stamp {
+  position: absolute;
+  top: 1.75rem;
+  font-size: 1.6rem;
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  padding: 0.25rem 1.25rem;
+  border-radius: 0.75rem;
+  border: 4px solid;
+  pointer-events: none;
+  opacity: 0;
+  z-index: 20;
+  will-change: opacity, transform;
+}
+
+.stamp-true {
+  right: 1.75rem;
+  color: var(--color-true);
+  border-color: var(--color-true);
+  transform: rotate(12deg);
+}
+
+.stamp-false {
+  left: 1.75rem;
+  color: var(--color-false);
+  border-color: var(--color-false);
+  transform: rotate(-12deg);
+}
+
+/* ==========================================================================
+   Explanation Overlay View (Inside Stack or Above)
+   ========================================================================== */
+.explanation-card {
+  position: absolute;
+  inset: 0;
+  background: var(--bg-card);
+  border: 1px solid var(--border-card);
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-pop);
+  padding: 2.25rem 2rem;
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  z-index: 30;
+  animation: explanationSlideUp 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.explanation-card.active {
+  display: flex;
+}
+
+@keyframes explanationSlideUp {
+  from {
+    opacity: 0;
+    transform: translateY(24px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.explanation-icon-wrapper {
+  width: 76px;
+  height: 76px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1.25rem;
+  animation: iconBounce 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+@keyframes iconBounce {
+  0% { transform: scale(0.5); opacity: 0; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+.explanation-icon-wrapper.correct {
+  background: var(--color-true-light);
+  color: var(--color-true);
+}
+
+.explanation-icon-wrapper.incorrect {
+  background: var(--color-false-light);
+  color: var(--color-false);
+}
+
+.explanation-title {
+  font-size: 2rem;
+  font-weight: 900;
+  letter-spacing: -0.03em;
+  margin-bottom: 0.75rem;
+}
+
+.explanation-title.correct {
+  color: var(--color-true);
+}
+
+.explanation-title.incorrect {
+  color: var(--color-false);
+}
+
+.explanation-body {
+  font-size: 1.05rem;
+  line-height: 1.55;
+  color: var(--text-muted);
+  margin-bottom: 1.75rem;
+  max-width: 340px;
+}
+
+/* ==========================================================================
+   Sources Section
+   ========================================================================== */
+.sources-panel {
+  background: var(--bg-card);
+  border: 1px solid var(--border-card);
+  border-radius: 1.25rem;
+  padding: 1rem 1.25rem;
+  box-shadow: var(--shadow-sm);
+  margin-bottom: 1.25rem;
+  transition: opacity 0.2s ease;
+}
+
+.sources-panel.hidden {
+  display: none;
+}
+
+.sources-label {
+  display: block;
+  font-size: 0.65rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-subtle);
+  margin-bottom: 0.6rem;
+}
+
+.sources-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.source-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  background: var(--bg-card-subtle);
+  border: 1px solid var(--border-card);
+  color: var(--text-muted);
+  padding: 0.4rem 0.75rem;
+  border-radius: 0.65rem;
+  font-size: 0.78rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.source-chip:hover {
+  background: var(--bg-card-hover);
+  color: var(--text-main);
+  border-color: var(--text-subtle);
+  transform: translateY(-1px);
+}
+
+/* ==========================================================================
+   Action Buttons
+   ========================================================================== */
+.actions-row {
+  display: flex;
+  gap: 0.85rem;
+  width: 100%;
+}
+
+.btn-primary {
+  width: 100%;
+  background: var(--color-accent);
+  color: var(--text-light);
+  border: none;
+  border-radius: var(--radius-btn);
+  padding: 1.15rem 1.75rem;
+  font-family: inherit;
+  font-size: 1.1rem;
+  font-weight: 800;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  cursor: pointer;
+  box-shadow: 0 10px 20px -5px rgba(15, 23, 42, 0.2);
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.btn-primary:hover {
+  background: var(--color-accent-hover);
+  transform: translateY(-2px);
+  box-shadow: 0 14px 24px -5px rgba(15, 23, 42, 0.28);
+}
+
+.btn-primary:active {
+  transform: scale(0.97);
+}
+
+/* Decision Buttons (FALSCH / WAHR) */
+.btn-decision {
+  flex: 1;
+  padding: 1.1rem 1rem;
+  border-radius: var(--radius-btn);
+  font-family: inherit;
+  font-size: 1.15rem;
+  font-weight: 900;
+  letter-spacing: 0.04em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  background: var(--bg-card);
+  box-shadow: var(--shadow-sm);
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  border: 2px solid;
+}
+
+.btn-decision-false {
+  color: var(--color-false);
+  border-color: var(--color-false);
+}
+
+.btn-decision-false:hover {
+  background: var(--color-false-light);
+  border-color: var(--color-false-hover);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 18px -4px rgba(225, 29, 72, 0.25);
+}
+
+.btn-decision-false:active {
+  transform: scale(0.96);
+}
+
+.btn-decision-true {
+  color: var(--color-true);
+  border-color: var(--color-true);
+}
+
+.btn-decision-true:hover {
+  background: var(--color-true-light);
+  border-color: var(--color-true-hover);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 18px -4px rgba(5, 150, 105, 0.25);
+}
+
+.btn-decision-true:active {
+  transform: scale(0.96);
+}
+
+/* Secondary Button (Teilen) */
+.btn-secondary {
+  flex: 1;
+  background: var(--bg-card-subtle);
+  color: var(--text-main);
+  border: 1px solid var(--border-card);
+  border-radius: var(--radius-btn);
+  padding: 1rem 1.25rem;
+  font-family: inherit;
+  font-size: 1rem;
+  font-weight: 800;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-secondary:hover {
+  background: var(--bg-card-hover);
+  transform: translateY(-1px);
+}
+
+.btn-secondary:active {
+  transform: scale(0.97);
+}
+
+/* Desktop Keyboard Hint */
+.keyboard-hint {
+  text-align: center;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--text-subtle);
+  margin-top: 1rem;
+}
+
+@media (max-width: 640px) {
+  .keyboard-hint {
+    display: none;
+  }
+}
+
+/* ==========================================================================
+   Toast Notification
+   ========================================================================== */
+.toast-notice {
+  position: fixed;
+  bottom: 2rem;
+  left: 50%;
+  transform: translateX(-50%) translateY(30px);
+  background: var(--text-main);
+  color: var(--bg-card);
+  padding: 0.75rem 1.5rem;
+  border-radius: var(--radius-pill);
+  font-size: 0.85rem;
+  font-weight: 700;
+  box-shadow: var(--shadow-pop);
+  pointer-events: none;
+  opacity: 0;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.toast-notice.show {
+  transform: translateX(-50%) translateY(0);
+  opacity: 1;
+}
+
+/* SVGs inline helper */
+.icon-svg {
+  display: inline-block;
+  width: 1.25rem;
+  height: 1.25rem;
+  stroke-width: 2.25;
+  stroke: currentColor;
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  vertical-align: middle;
+}
