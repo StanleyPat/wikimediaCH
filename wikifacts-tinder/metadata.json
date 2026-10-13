@@ -1,0 +1,5 @@
+{
+  "name": "WikiFacts Tinder",
+  "description": "A fast-paced trivia game where you swipe right for true facts and left for false ones, powered by Wikimedia-style knowledge.",
+  "requestFramePermissions": []
+}
