@@ -171,6 +171,8 @@
       this.cardUnder = document.getElementById('card-under');
       this.factTextActive = document.getElementById('fact-text-active');
       this.factTextUnder = document.getElementById('fact-text-under');
+      this.factTagActive = document.getElementById('fact-tag-active');
+      this.factTagUnder = document.getElementById('fact-tag-under');
       this.stampTrue = document.getElementById('stamp-true');
       this.stampFalse = document.getElementById('stamp-false');
 
@@ -182,8 +184,8 @@
       this.btnNextFact = document.getElementById('btn-next-fact');
 
       // Sources & Decision Buttons
-      this.sourcesPanel = document.getElementById('sources-panel');
-      this.sourcesTags = document.getElementById('sources-tags');
+      this.sourcesActive = document.getElementById('sources-tags');
+      this.sourcesUnder = document.getElementById('sources-under');
       this.gameActions = document.getElementById('game-actions');
       this.btnFalse = document.getElementById('btn-false');
       this.btnTrue = document.getElementById('btn-true');
@@ -330,67 +332,97 @@
     // ==========================================================================
     // Card Rendering & Content
     // ==========================================================================
+    // Drag-Variablen: Das Aussehen (Neigung, Schatten, Farben) liegt in style.css.
+    setDragVars(dx, dy, rot) {
+      const style = this.cardActive.style;
+      style.setProperty('--dx', `${dx}px`);
+      style.setProperty('--dy', `${dy}px`);
+      style.setProperty('--rot', `${rot}deg`);
+    }
+
+    setStamp(stamp, progress) {
+      stamp.style.setProperty('--p', String(progress));
+    }
+
+    setUnderLift(lift) {
+      this.cardUnder.style.setProperty('--lift', String(lift));
+    }
+
+    hasNextCard() {
+      return this.cardUnder && this.cardUnder.style.display !== 'none';
+    }
+
+    setFactText(el, text) {
+      el.textContent = text;
+      el.classList.toggle('fact-text--long', text.length > 90);
+    }
+
     renderCurrentCard() {
-      const currentFact = this.facts[this.state.currentIndex];
-      const nextFact = this.facts[this.state.currentIndex + 1];
+      const total = this.facts.length;
+      const index = this.state.currentIndex;
+      const currentFact = this.facts[index];
+      const nextFact = this.facts[index + 1];
 
       // Hide explanation
       this.state.isExplanationOpen = false;
       this.explanationCard.classList.remove('active');
-      this.sourcesPanel.classList.remove('hidden');
       this.gameActions.style.visibility = 'visible';
 
-      // Reset Active Card Transforms
-      this.cardActive.className = 'fact-card card-active';
-      this.cardActive.style.transform = 'translate3d(0, 0, 0) rotate(0deg)';
-      this.cardActive.style.opacity = '1';
-      this.stampTrue.style.opacity = '0';
-      this.stampFalse.style.opacity = '0';
+      // Reset active card to its resting pose
+      this.cardActive.className = 'fact-card card-active entering';
+      this.setDragVars(0, 0, 0);
+      this.setStamp(this.stampTrue, 0);
+      this.setStamp(this.stampFalse, 0);
+      this.stampTrue.classList.remove('slam');
+      this.stampFalse.classList.remove('slam');
+      this.cardStack.classList.remove('is-dragging');
 
-      // Set Text
       if (currentFact) {
-        this.factTextActive.textContent = currentFact.text;
+        this.setFactText(this.factTextActive, currentFact.text);
+        this.factTagActive.textContent = `Fakt ${index + 1} / ${total}`;
+        this.renderSources(this.sourcesActive, currentFact.sources, true);
       }
 
-      // Next Card Preview (Shadow card)
+      // Next card behind
       if (nextFact) {
         this.cardUnder.style.display = 'flex';
-        this.cardUnder.style.transform = 'translateY(16px) scale(0.95)';
-        this.cardUnder.style.opacity = '0.55';
-        this.factTextUnder.textContent = nextFact.text;
+        this.setUnderLift(0);
+        this.setFactText(this.factTextUnder, nextFact.text);
+        this.factTagUnder.textContent = `Fakt ${index + 2} / ${total}`;
+        this.renderSources(this.sourcesUnder, nextFact.sources, false);
       } else {
         this.cardUnder.style.display = 'none';
       }
 
-      // Render Sources
-      this.renderSources(currentFact ? currentFact.sources : []);
       this.updateProgressPills();
     }
 
-    renderSources(sources) {
-      if (!this.sourcesTags) return;
-      this.sourcesTags.innerHTML = '';
-      if (!sources || sources.length === 0) {
-        this.sourcesPanel.classList.add('hidden');
-        return;
-      }
-      this.sourcesPanel.classList.remove('hidden');
+    renderSources(container, sources, interactive) {
+      if (!container) return;
+      container.innerHTML = '';
+      if (!sources || sources.length === 0) return;
 
       sources.forEach((source) => {
-        const a = document.createElement('a');
-        a.href = source.url;
-        a.target = '_blank';
-        a.rel = 'noopener noreferrer';
-        a.className = 'source-chip';
-        a.innerHTML = `
-          <svg class="icon-svg" style="width: 0.8rem; height: 0.8rem;" viewBox="0 0 24 24">
-            <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
-            <polyline points="15 3 21 3 21 9"></polyline>
-            <line x1="10" y1="14" x2="21" y2="3"></line>
-          </svg>
-          <span>${source.label}</span>
-        `;
-        this.sourcesTags.appendChild(a);
+        const chip = document.createElement(interactive ? 'a' : 'span');
+        chip.className = 'source-chip';
+        if (interactive) {
+          chip.href = source.url;
+          chip.target = '_blank';
+          chip.rel = 'noopener noreferrer';
+        }
+
+        const icon = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+        icon.setAttribute('class', 'icon-svg');
+        icon.setAttribute('viewBox', '0 0 24 24');
+        icon.setAttribute('style', 'width: 0.8rem; height: 0.8rem;');
+        icon.innerHTML = '<line x1="7" y1="17" x2="17" y2="7"></line><polyline points="8 7 17 7 17 16"></polyline>';
+
+        const label = document.createElement('span');
+        label.textContent = source.label;
+
+        chip.appendChild(icon);
+        chip.appendChild(label);
+        container.appendChild(chip);
       });
     }
 
@@ -439,6 +471,8 @@
 
       const onPointerDown = (e) => {
         if (this.state.isSwiping || this.state.isExplanationOpen) return;
+        // Tap on a source chip opens the link instead of starting a drag
+        if (e.target.closest && e.target.closest('a')) return;
         this.sound.init();
 
         this.dragState.isDragging = true;
@@ -450,6 +484,7 @@
 
         card.classList.remove('snapping', 'swiping-left', 'swiping-right');
         card.classList.add('dragging');
+        this.cardStack.classList.add('is-dragging');
         card.setPointerCapture(e.pointerId);
       };
 
@@ -465,30 +500,23 @@
         const dampedY = deltaY * 0.25;
         const rotation = Math.max(-30, Math.min(30, (deltaX / 300) * 22));
 
-        card.style.transform = `translate3d(${deltaX}px, ${dampedY}px, 0) rotate(${rotation}deg)`;
+        this.setDragVars(deltaX, dampedY, rotation);
 
-        // Dynamic Stamps Opacity
+        // Dynamic stamps
         if (deltaX > 20) {
-          const opacity = Math.min(1, (deltaX - 20) / 90);
-          this.stampTrue.style.opacity = opacity.toString();
-          this.stampFalse.style.opacity = '0';
+          this.setStamp(this.stampTrue, Math.min(1, (deltaX - 20) / 90));
+          this.setStamp(this.stampFalse, 0);
         } else if (deltaX < -20) {
-          const opacity = Math.min(1, (-deltaX - 20) / 90);
-          this.stampFalse.style.opacity = opacity.toString();
-          this.stampTrue.style.opacity = '0';
+          this.setStamp(this.stampFalse, Math.min(1, (-deltaX - 20) / 90));
+          this.setStamp(this.stampTrue, 0);
         } else {
-          this.stampTrue.style.opacity = '0';
-          this.stampFalse.style.opacity = '0';
+          this.setStamp(this.stampTrue, 0);
+          this.setStamp(this.stampFalse, 0);
         }
 
-        // Preview card scale-up effect
-        if (this.cardUnder && this.cardUnder.style.display !== 'none') {
-          const progress = Math.min(1, Math.abs(deltaX) / 120);
-          const underScale = 0.95 + progress * 0.05;
-          const underY = 16 - progress * 16;
-          const underOpacity = 0.55 + progress * 0.45;
-          this.cardUnder.style.transform = `translateY(${underY}px) scale(${underScale})`;
-          this.cardUnder.style.opacity = underOpacity.toString();
+        // Next card moves forward as the top card leaves
+        if (this.hasNextCard()) {
+          this.setUnderLift(Math.min(1, Math.abs(deltaX) / 120));
         }
       };
 
@@ -496,6 +524,7 @@
         if (!this.dragState.isDragging) return;
         this.dragState.isDragging = false;
         card.classList.remove('dragging');
+        this.cardStack.classList.remove('is-dragging');
 
         try {
           card.releasePointerCapture(e.pointerId);
@@ -513,14 +542,10 @@
         } else {
           // Snap Back
           card.classList.add('snapping');
-          card.style.transform = 'translate3d(0, 0, 0) rotate(0deg)';
-          this.stampTrue.style.opacity = '0';
-          this.stampFalse.style.opacity = '0';
-
-          if (this.cardUnder && this.cardUnder.style.display !== 'none') {
-            this.cardUnder.style.transform = 'translateY(16px) scale(0.95)';
-            this.cardUnder.style.opacity = '0.55';
-          }
+          this.setDragVars(0, 0, 0);
+          this.setStamp(this.stampTrue, 0);
+          this.setStamp(this.stampFalse, 0);
+          if (this.hasNextCard()) this.setUnderLift(0);
 
           setTimeout(() => {
             card.classList.remove('snapping');
@@ -537,25 +562,27 @@
     triggerProgrammaticSwipe(direction) {
       if (this.state.isSwiping || this.state.isExplanationOpen) return;
       this.sound.init();
-      this.executeSwipe(direction);
+      this.executeSwipe(direction, { slam: true });
     }
 
-    executeSwipe(direction) {
+    executeSwipe(direction, options = {}) {
       this.state.isSwiping = true;
       this.sound.playSwipe();
 
       const card = this.cardActive;
       card.classList.remove('snapping', 'dragging');
 
-      if (direction === 'right') {
-        this.stampTrue.style.opacity = '1';
-        this.stampFalse.style.opacity = '0';
-        card.classList.add('swiping-right');
-      } else {
-        this.stampFalse.style.opacity = '1';
-        this.stampTrue.style.opacity = '0';
-        card.classList.add('swiping-left');
+      const stamp = direction === 'right' ? this.stampTrue : this.stampFalse;
+      const otherStamp = direction === 'right' ? this.stampFalse : this.stampTrue;
+      this.setStamp(stamp, 1);
+      this.setStamp(otherStamp, 0);
+      if (options.slam) {
+        stamp.classList.remove('slam');
+        void stamp.offsetWidth; // restart animation
+        stamp.classList.add('slam');
       }
+      card.classList.add(direction === 'right' ? 'swiping-right' : 'swiping-left');
+      if (this.hasNextCard()) this.setUnderLift(1);
 
       // After card swipe animation completes
       setTimeout(() => {
@@ -574,6 +601,7 @@
         this.state.score += 1;
         this.updateScoreBadge(true);
         this.sound.playCorrect();
+        this.celebrate();
       } else {
         this.sound.playIncorrect();
       }
@@ -585,6 +613,14 @@
       });
 
       this.showExplanation(isCorrect, currentFact);
+    }
+
+    celebrate() {
+      if (!window.Confetti) return;
+      const badge = document.querySelector('.score-badge');
+      if (!badge) return;
+      const rect = badge.getBoundingClientRect();
+      window.Confetti.burst(rect.left + rect.width / 2, rect.top + rect.height / 2);
     }
 
     showExplanation(isCorrect, fact) {

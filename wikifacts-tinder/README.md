@@ -10,7 +10,7 @@ Entwickelt mit dem **Vanilla Stack (reines HTML5, CSS3 und modernes JavaScript)*
 - **Soundeffekte:** Integrierter Sound-Synthesizer via Web Audio API (keine externen Audio-Dateien nötig), mit Mute-Schalter.
 - **Quellenprüfung:** Verlinkung zu geprüften Wikipedia- und Fachquellen für jeden Fakt.
 - **Ergebnis & Fakten-Rückblick:** Detaillierte Punkteauswertung mit Akkordeon zur Durchsicht aller überprüften Fakten und Share-Funktion.
-- **Responsive & Modernes Design:** Schlankes Zinc-Farbschema, Dark-Mode-Unterstützung, flüssige Animationen und typografische Eleganz.
+- **Pop-Design:** Sonnengelber Grund, dicke Tinte-Umrisse, harte Schatten, leicht schiefe Karten, federnde Animationen und Konfetti bei richtigen Antworten. Nur Light-Theme, Bewegung wird bei `prefers-reduced-motion` reduziert.
 
 ## Lokale Ausführung 🚀
 
@@ -32,9 +32,10 @@ python3 -m http.server 3000
 wikifacts-tinder/
 ├── index.html       # Semantische HTML5-Struktur & Screens
 ├── css/
-│   └── style.css    # Reines Vanilla CSS (Design-System, Animationen, Responsive Layout)
+│   └── style.css    # Reines Vanilla CSS (Pop-Design-System, Animationen, Responsive Layout)
 ├── js/
 │   ├── facts.js     # Fakten-Datensatz mit Erklärungen & Quellen
+│   ├── confetti.js  # Konfetti-Burst (Canvas, ohne Abhängigkeiten)
 │   └── app.js       # Game-Engine, Drag-Physik, Audio-Synthesizer & UI-Controller
 └── README.md
 ```

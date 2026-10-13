@@ -2,15 +2,16 @@
 <html lang="de">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="color-scheme" content="light" />
   <title>WikiFacts Tinder – Wahr oder Falsch?</title>
   <meta name="description" content="Ein temporeiches Wissens- und Quizspiel: Wische nach rechts für wahre Fakten und nach links für Mythen. Geprüft mit verlässlichen Wikimedia-Quellen." />
-  <meta name="theme-color" content="#f8fafc" />
+  <meta name="theme-color" content="#FFD54A" />
 
   <!-- Google Fonts Preconnect -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&display=swap" rel="stylesheet" />
 
   <!-- Vanilla CSS Stylesheet -->
   <link rel="stylesheet" href="css/style.css" />
@@ -84,11 +85,13 @@
 
       <!-- Tinder Card Stack Area -->
       <div class="card-stack-viewport" id="card-stack">
-        <!-- Next Card (Behind / Shadow) -->
+        <!-- Next Card (Behind) -->
         <article class="fact-card card-under" id="card-under" aria-hidden="true">
+          <span class="fact-tag" id="fact-tag-under"></span>
           <div class="fact-card-body">
             <p class="fact-text" id="fact-text-under">Nächster Fakt lädt...</p>
           </div>
+          <div class="card-sources" id="sources-under"></div>
         </article>
 
         <!-- Active Card (Foreground Draggable) -->
@@ -97,15 +100,13 @@
           <div class="stamp stamp-true" id="stamp-true" aria-hidden="true">WAHR</div>
           <div class="stamp stamp-false" id="stamp-false" aria-hidden="true">FALSCH</div>
 
+          <span class="fact-tag" id="fact-tag-active"></span>
           <div class="fact-card-body">
             <h2 class="fact-text" id="fact-text-active">Fakt wird geladen...</h2>
           </div>
 
-          <div class="card-swipe-hint" aria-hidden="true">
-            <span>← Falsch</span>
-            <span>•</span>
-            <span>Wahr →</span>
-          </div>
+          <!-- Recherche-Quellen (Chips werden per JS gerendert) -->
+          <div class="card-sources" id="sources-tags" role="group" aria-label="Recherche-Quellen"></div>
         </article>
 
         <!-- Explanation Overlay Card -->
@@ -126,14 +127,6 @@
           </button>
         </article>
       </div>
-
-      <!-- Sources Section -->
-      <aside class="sources-panel" id="sources-panel" aria-label="Recherche-Quellen">
-        <span class="sources-label">Recherche-Quellen</span>
-        <div class="sources-tags" id="sources-tags">
-          <!-- Dynamic Source Chips -->
-        </div>
-      </aside>
 
       <!-- Action Decision Buttons -->
       <nav class="actions-row" id="game-actions" aria-label="Entscheidungs-Buttons">
@@ -228,6 +221,7 @@
 
   <!-- Vanilla Scripts -->
   <script src="js/facts.js"></script>
+  <script src="js/confetti.js"></script>
   <script src="js/app.js"></script>
 </body>
 </html>
